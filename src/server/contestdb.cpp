@@ -74,7 +74,7 @@ bool ContestDB::loadMembers(){
     }
   }
 
-  QSqlQuery query("SELECT username, password, salt FROM" + dbTable, db);
+  QSqlQuery query("SELECT username, password, salt FROM " + dbTable, db);
     QSqlError error = query.lastError();
     if(error.isValid()){
         QMessageBox::warning(NULL, tr("Database query error"), tr("Please create database before using this mode"));
