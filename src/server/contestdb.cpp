@@ -53,13 +53,13 @@ ContestDB *ContestDB::GetInstance(){
 }
 
 bool ContestDB::loadMembers(){
-  QString dbType = Config.value("Contest/dbType", "sqlite");
+  QString dbType = Config.value("Contest/dbType", "sqlite").toString();
+  QString dbTable = Config.value("Contest/dbTable", "user").toString();
   if (dbType == "MySQL"){
-    QString dbUser = Config.value("Contest/dbUser");
-    QString dbHost = Config.value("Contest/dbHost");
-    QString dbPswd = Config.value("Contest/dbPasswd");
-    QString dbName = Config.value("Contest/dbName");
-    QString dbTable = Config.value("Contest/dbTable", "user");
+    QString dbUser = Config.value("Contest/dbUser").toString();
+    QString dbHost = Config.value("Contest/dbHost").toString();
+    QString dbPswd = Config.value("Contest/dbPasswd").toString();
+    QString dbName = Config.value("Contest/dbName").toString();
     QSqlDatabase dbMySQL = QSqlDatabase::addDatabase("QMYSQL");
     dbMySQL.setHostName(dbHost);
     dbMySQL.setDatabaseName(dbName);
