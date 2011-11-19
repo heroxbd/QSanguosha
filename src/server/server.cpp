@@ -855,7 +855,9 @@ void Server::processRequest(char *request){
     ClientSocket *socket = qobject_cast<ClientSocket *>(sender());
     socket->disconnect(this, SLOT(processRequest(char*)));
 
-    QRegExp rx("(signupr?) (.+):(.+)(:.+)?\n");
+    // signup(r) format is "signupr <base64(username)>:<avantar>[:<md5 of password>]"
+    // e.g. "signupr aGVpaGVp:machao:4e4d6c332b6fe62a63afe56171fd3725"
+    QRegExp rx("(signupr?) ([^:]+):([^:]+)(:.+)?\n");
     if(!rx.exactMatch(request)){
         emit server_message(tr("Invalid signup string: %1").arg(request));
         socket->send("warn INVALID_FORMAT");

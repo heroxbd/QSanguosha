@@ -53,7 +53,26 @@ ContestDB *ContestDB::GetInstance(){
 }
 
 bool ContestDB::loadMembers(){
-    QSqlQuery query("SELECT username, password, salt FROM users");
+  QString dbType = Config.value("Contest/dbType", "sqlite");
+  if (dbType == "MySQL"){
+    QString dbUser = Config.value("Contest/dbUser");
+    QString dbHost = Config.value("Contest/dbHost");
+    QString dbPswd = Config.value("Contest/dbPasswd");
+    QString dbName = Config.value("Contest/dbName");
+    QString dbTable = Config.value("Contest/dbTable", "user");
+    QSqlDatabase dbMySQL = QSqlDatabase::addDatabase("QMYSQL");
+    dbMySQL.setHostName(dbHost);
+    dbMySQL.setDatabaseName(dbName);
+    dbMySQL.setUserName(dbUser);
+    dbMySQL.setPassword(dbPswd);
+    bool ok = dbMySQL.open();
+    if(!ok){
+      QSqlError error = dbMySQL.lastError();
+      QMessageBox::warning(NULL, tr("Database open error"), tr("The database can not be opened:\n %1").arg(error.text()));
+    }
+  }
+
+    QSqlQuery query("SELECT username, password, salt FROM" + dbTable);
     QSqlError error = query.lastError();
     if(error.isValid()){
         QMessageBox::warning(NULL, tr("Database query error"), tr("Please create database before using this mode"));
