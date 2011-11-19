@@ -42,7 +42,7 @@ ContestDB::ContestDB(QObject *parent) :
                "end_time TEXT,"
                "winner TEXT)");
 
-    ContestDB::loadMembers()
+    ContestDB::loadMembers();
 }
 
 ContestDB *ContestDB::GetInstance(){
