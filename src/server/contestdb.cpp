@@ -26,7 +26,6 @@ ContestDB::ContestDB(QObject *parent) :
         QMessageBox::warning(NULL, tr("Database open error"), tr("The database can not be opened:\n %1").arg(error.text()));
     }
 
-
     QSqlQuery query;
     query.exec("CREATE TABLE IF NOT EXISTS results"
                "(start_time TEXT PRIMARY KEY,"
@@ -42,6 +41,8 @@ ContestDB::ContestDB(QObject *parent) :
                "(start_time TEXT PROMARY KEY"
                "end_time TEXT,"
                "winner TEXT)");
+
+    ContestDB::loadMembers()
 }
 
 ContestDB *ContestDB::GetInstance(){
@@ -55,24 +56,25 @@ ContestDB *ContestDB::GetInstance(){
 bool ContestDB::loadMembers(){
   QString dbType = Config.value("Contest/dbType", "sqlite").toString();
   QString dbTable = Config.value("Contest/dbTable", "user").toString();
+  QSqlDatabase db;
   if (dbType == "MySQL"){
     QString dbUser = Config.value("Contest/dbUser").toString();
     QString dbHost = Config.value("Contest/dbHost").toString();
     QString dbPswd = Config.value("Contest/dbPasswd").toString();
     QString dbName = Config.value("Contest/dbName").toString();
-    QSqlDatabase dbMySQL = QSqlDatabase::addDatabase("QMYSQL");
-    dbMySQL.setHostName(dbHost);
-    dbMySQL.setDatabaseName(dbName);
-    dbMySQL.setUserName(dbUser);
-    dbMySQL.setPassword(dbPswd);
-    bool ok = dbMySQL.open();
+    db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName(dbHost);
+    db.setDatabaseName(dbName);
+    db.setUserName(dbUser);
+    db.setPassword(dbPswd);
+    bool ok = db.open();
     if(!ok){
-      QSqlError error = dbMySQL.lastError();
+      QSqlError error = db.lastError();
       QMessageBox::warning(NULL, tr("Database open error"), tr("The database can not be opened:\n %1").arg(error.text()));
     }
   }
 
-    QSqlQuery query("SELECT username, password, salt FROM" + dbTable);
+  QSqlQuery query("SELECT username, password, salt FROM" + dbTable, db);
     QSqlError error = query.lastError();
     if(error.isValid()){
         QMessageBox::warning(NULL, tr("Database query error"), tr("Please create database before using this mode"));

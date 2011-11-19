@@ -772,11 +772,6 @@ bool ServerDialog::config(){
     Config.BanPackages = ban_packages.toList();
     Config.setValue("BanPackages", Config.BanPackages);
 
-    if(Config.ContestMode){
-        ContestDB *db = ContestDB::GetInstance();
-        return db->loadMembers();
-    }
-
     return true;
 }
 
