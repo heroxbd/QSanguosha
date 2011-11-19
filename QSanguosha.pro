@@ -4,7 +4,7 @@
 TARGET = QSanguosha
 QT += network sql
 TEMPLATE = app
-CONFIG += warn_on audio joystick qaxcontainer
+CONFIG += warn_on audio joystick qaxcontainer debug_and_release
 
 macx {
     CONFIG -= joystick # in Mac, we do not support joystick currently
@@ -191,7 +191,7 @@ win32{
 }
 
 unix:!macx {
-    LIBS += -lm -llua
+    LIBS += -lm -llua5.1
 }
 
 macx {

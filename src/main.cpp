@@ -49,12 +49,6 @@ int main(int argc, char *argv[])
     BanPair::loadBanPairs();
 
 
-    QFile file("sanguosha.qss");
-    if(file.open(QIODevice::ReadOnly)){
-        QTextStream stream(&file);
-        qApp->setStyleSheet(stream.readAll());
-    }
-
     if(qApp->arguments().contains("-server")){
         Server *server = new Server(qApp);
         printf("Server is starting on port %u\n", Config.ServerPort);
@@ -65,6 +59,12 @@ int main(int argc, char *argv[])
             printf("Starting failed!\n");
 
         return qApp->exec();
+    } else {
+      QFile file("sanguosha.qss");
+      if(file.open(QIODevice::ReadOnly)){
+        QTextStream stream(&file);
+        qApp->setStyleSheet(stream.readAll());
+      }
     }
 
 #ifdef AUDIO_SUPPORT
